@@ -1,2 +1,2 @@
 # Blockchain-Vote
-Blockchain based Voting System
+A simple implementation of blockchain technology on voting system. 
