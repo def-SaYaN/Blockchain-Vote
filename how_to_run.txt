@@ -1,0 +1,41 @@
+Welcome to BlockChain based voting this is a simple implementation using C++
+--------------------------------------------------------------------------------
+
+
+There are 4 main C++ files named "merkel.cpp","mine.cpp","uservote.cpp","hash_sha.cpp". 
+
+REQUIREMENTS:
+--------------
+You need to install crypto++ library for using SHA256 hashing.
+need g++ compiler if using terminal
+
+What is happening and how to execute?
+-> 
+We are creating chain of blocks with 6 persons data(username+votes+timestamp+hash) per file(Data_blockchain*)and this is our public blocks with all information stored in it.
+NOTE: Never delete file Data_blockchain0 and blockchain.txt these are hardcoded.
+
+Now after compiling g++ -c hash_sha.cpp -lcrypto++;g++ -c uservote.cpp;
+compile:     g++ -o block_hash uservote.o hash_sha.o -lcrypto++
+run:       ./block_hash
+
+This uservote.cpp file runs to create a new file Data_blockchain1 with all user info.
+
+Now to mine
+------------
+compile:  g++ -c mine.cpp;g++ -c merkel.cpp;g++ -c hash_sha.cpp -lcrypto++
+compile g++ -o mine mine.o merkel.o hash_sha.o -lcrypto++
+to run: ./mine
+
+This mine.cpp will find a merkel root using the above 6 person calculated hash(username+vote) and store it in merkel.txt file. And the mine.cpp will start mining for checking the difficulty(can be changed accordingly) using "merkelvalue+nonce" once it is found the hash is displayed on screen with the time required to calculate. And the new block is being digitally signed using the "version_number+previous_blockhash+merkelroot_value+nonce".
+
+NOTE: All the previous blockhash_value are stored in blockchain.txt and hence updated according to the new block
+
+Thus creating a chain of blocks.
+
+Some reference links for learning more about blockchain:
+https://bitcoin.org/en/developer-reference
+https://bitcoin.stackexchange.com/questions
+https://bitfalls.com/2017/10/03/read-bitcoin-blockchain-data-blockexplorer/
+https://blockgeeks.com
+
+
