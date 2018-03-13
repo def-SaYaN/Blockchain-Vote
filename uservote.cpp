@@ -115,7 +115,7 @@ public:
 
 int main()
 {
-int n;
+int k;
 int cal;
 string s;
 string hval;
@@ -125,15 +125,11 @@ string hval;
 //file2.close();
 
 cout<<"\n\nWelcome to Blockchain based Voting System(6 vote at a time)"<<endl;
-cout<<"Enter number of person: ";
-cin>>n;
-
-cal=n/6;
-
+cout<<"Enter Block No.: "<<endl;
+cin>>k;
+cout<<"Enter Data into Blocks\n";
 
 //CHANGES
-for(int k=1;k<=cal;k++)
-{
 	for(int i=0;i<6;i++)
 	{
 		Usrt *u=new Usrt();
@@ -150,7 +146,7 @@ for(int k=1;k<=cal;k++)
 	//create_even1(2);
 	//calculate_even1();
 	//system("./mine");
-}
+
 
 
 return 0;

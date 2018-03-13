@@ -1,6 +1,7 @@
 //Edited
 
 #include<iostream>
+#include <sys/stat.h>
 #include <chrono>
 #include <ctime>
 #include "hash_sha.h"
@@ -29,7 +30,8 @@ class Blockchain
 {
 string sval;
 string value;
-
+time_t end_time;
+string et;
 string version="000001";
 string previous_hash;
 string merkle_root;
@@ -68,8 +70,9 @@ while(1)
 	{
 	auto end = chrono::system_clock::now();
 	chrono::duration<double> elapsed_seconds = end-start;
-
-	str=sval+n; //this is the block-header version+previous_hash+merkle_root+nonce value
+	end_time = std::chrono::system_clock::to_time_t(end);
+	et = ctime(&end_time);
+	str=sval+n+et ; //this is the block-header version+previous_hash+merkle_root+nonce value
 	s1=calculate_sha(str); //previous block hash must be added to incoming block
 
 	ofstream file1("blockchain.txt",ios::app);
@@ -114,6 +117,16 @@ string lastHash(ifstream& in)
     return value;
 }
 
+bool fileExists(string& filename)
+{
+    struct stat buf;
+    if (stat(filename.c_str(), &buf) != -1)
+    {
+        return true;
+    }
+    return false;
+}
+
 };
 
 
@@ -121,8 +134,9 @@ string lastHash(ifstream& in)
 int main()
 {
 
-Blockchain b2;
-
+Blockchain b1,b2;
+int blocknumber;
+string blocknum;
 string line;
 string phsh;
 string a;
@@ -130,12 +144,22 @@ string g="000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f";
 string blkval;
 
 cout<<"\nBlockchain Status:"<<endl;
+cout<<"WHiCh bLoCk tO MiNe?: ";
+cin>>blocknumber;
 
+
+blocknum=to_string(blocknumber);
+string blockname = "Data_blockchain" + blocknum;
+
+bool blockexist=b2.fileExists(blockname);
+
+try{
+if(blockexist)
+{
 
 //Calculating Merkle Root
 //ofstream filet("merkle.txt");
 //filet.close();
-
 create_even(6);
 calculate_even();
 create_odd();
@@ -157,7 +181,7 @@ arr.push_back(line);
 file.close();
 
 
-/*//genesis block
+/*genesis block
 b1.insert_value(g,arr);
 blkval=b1.calculate();
 
@@ -168,6 +192,7 @@ fileD.close();
 */
 
 //Must be new block and in recursive
+//selects the recent value from below.
 ifstream file2("blockchain.txt");
 if(!file2)
 {
@@ -182,9 +207,27 @@ file2.close();
 cout<<"\nlast value in blockchain:"<<a<<endl;
 b2.insert_value(a,arr);
 blkval=b2.calculate();
-ofstream fileD("Data_blockchain1",ios::app);
+
+
+ofstream fileD(blockname,ios::app);
+if(!fileD)
+{
+cout<<"Error";
+}
 fileD << blkval <<"\n";
 fileD.close();
+}
+
+else
+{
+cout<<"No such block\n";
+exit(0);
+}
+}
+catch(exception& e)
+{
+cout<<"Cannot Start Already Mined block\n";
+}
 
 
 return 0;
